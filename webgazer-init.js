@@ -1,10 +1,19 @@
-// Initialize WebGazer
+// Initialize WebGazer in sandbox iframe
 webgazer.setRegression('ridge')
   .setTracker('clmtrackr')
+  .saveDataAcrossSessions(true)
+  .showPredictionPoints(true)
   .begin()
-  .showPredictionPoints(true);
+  .then(() => {
+    console.log('WebGazer initialized in sandbox');
+  })
+  .catch((err) => {
+    console.error('WebGazer failed to start:', err);
+  });
 
-// Save calibration data
-function saveCalibration() {
-  localStorage.setItem('webgazerData', JSON.stringify(webgazer.getData()));
+// (Optional) Debug-only function to clear calibration
+function resetCalibration() {
+  localStorage.removeItem('webgazerGlobalData');
+  localStorage.removeItem('webgazerVideoFeedback');
+  location.reload();
 }
