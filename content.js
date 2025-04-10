@@ -57,13 +57,16 @@ let lastChange = Date.now();
 const cooldown = 2000;
 
 if (typeof webgazer !== 'undefined') {
-  if (localStorage.getItem('studyshift_calibrated') === 'true') {
-    console.log("👁️ Starting StudyShift eye tracking...");
-    startEyeTracking();
-  } else {
-    console.warn("❌ Not calibrated. Please complete calibration first.");
-  }
+  chrome.storage.local.get('isCalibrated', (result) => {
+    if (result.isCalibrated === true) {
+      console.log("👁️ Starting StudyShift eye tracking...");
+      startEyeTracking();
+    } else {
+      console.warn("❌ Not calibrated. Please complete calibration first.");
+    }
+  });
 }
+
 
 function startEyeTracking() {
   webgazer.setRegression('ridge')
