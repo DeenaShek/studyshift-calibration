@@ -16,3 +16,18 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
     });
   }
 });
+chrome.commands.onCommand.addListener((command) => {
+  let mode = null;
+
+  if (command === 'focus_mode') mode = 'focus';
+  if (command === 'help_mode') mode = 'help';
+  if (command === 'night_mode') mode = 'night';
+
+  if (mode) {
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      if (tabs[0]?.id) {
+        chrome.tabs.sendMessage(tabs[0].id, { mode: mode });
+      }
+    });
+  }
+});
