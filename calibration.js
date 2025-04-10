@@ -32,6 +32,7 @@ async function initCalibration() {
 function startCalibration() {
   startTime = Date.now();
   updateProgress();
+  updateCountdown();
 
   progressInterval = setInterval(updateProgress, 100);
   countdownInterval = setInterval(updateCountdown, 1000);
@@ -54,11 +55,12 @@ function updateCountdown() {
 function finishCalibration() {
   clearInterval(progressInterval);
   clearInterval(countdownInterval);
+
   webgazer.end();
 
   const timestamp = new Date().toISOString();
 
-  chrome.storage.local.set({
+  chrome.storage?.local.set({
     isCalibrated: true,
     studyshift_last_calibration: timestamp
   }, () => {
@@ -69,10 +71,10 @@ function finishCalibration() {
     document.getElementById('countdown').textContent = 'Success!';
     document.getElementById('progressBar').style.width = '100%';
 
+    // Give user 3 seconds to read the message, then close
     setTimeout(() => {
-  window.location.href = 'https://studyshift-extension-close';
-}, 10000);
-
+      window.location.href = 'https://studyshift-extension-close';
+    }, 3000);
   });
 }
 
