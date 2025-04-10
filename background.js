@@ -8,11 +8,11 @@ chrome.runtime.onInstalled.addListener(() => {
   });
 });
 
-// Watch for the magic URL that signals "I'm done!"
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-  if (tab.url && tab.url.startsWith('https://studyshift-extension-close')) {
+  if (changeInfo.url && changeInfo.url.startsWith('https://studyshift-extension-close')) {
     chrome.storage.local.set({ isCalibrated: true }, () => {
-      chrome.tabs.remove(tabId); // Close the tab after calibration
+      chrome.tabs.remove(tabId);
+      console.log('Calibration complete! Tab closed.');
     });
   }
 });
