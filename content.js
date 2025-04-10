@@ -1,9 +1,8 @@
-// content.js - Final StudyShift Gaze-Based Adaptive UI
+// content.js - StudyShift with Live Gaze Logging
 
 const styleTag = document.createElement('style');
 document.head.appendChild(styleTag);
 
-// UI Modes
 const modes = {
   focus: `
     [href*="facebook.com"], [href*="twitter.com"], [href*="instagram.com"],
@@ -52,13 +51,11 @@ const modes = {
   `
 };
 
-// Gaze detection setup
 let isTracking = false;
 let currentMode = null;
 let lastChange = Date.now();
 const cooldown = 2000;
 
-// ✅ Fix: Use correct key from calibration
 if (typeof webgazer !== 'undefined') {
   if (!localStorage.getItem('studyshift_calibrated')) {
     console.warn('🧠 StudyShift: Calibration not detected. Please calibrate.');
@@ -106,7 +103,6 @@ function startEyeTracking() {
   }, 1000);
 }
 
-// Apply dynamic UI styling
 function applyMode(mode) {
   if (mode !== currentMode && modes[mode]) {
     console.log(`⚡ Switching to ${mode.toUpperCase()} mode`);
@@ -122,7 +118,6 @@ function applyMode(mode) {
   }
 }
 
-// Handle manual mode switching via popup or hotkeys
 chrome.runtime.onMessage.addListener((request) => {
   if (request.mode && modes[request.mode]) {
     console.log(`🔧 Manual mode: ${request.mode}`);
