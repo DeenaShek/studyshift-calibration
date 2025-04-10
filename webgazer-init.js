@@ -1,6 +1,6 @@
 // Initialize WebGazer in sandbox iframe
 webgazer.setRegression('ridge')
-  .setTracker('clmtrackr')
+  .setTracker('TFFacemesh')
   .saveDataAcrossSessions(true)
   .showPredictionPoints(true)
   .begin()
