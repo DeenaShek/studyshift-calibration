@@ -67,7 +67,6 @@ if (typeof webgazer !== 'undefined') {
   });
 }
 
-
 function startEyeTracking() {
   webgazer.setRegression('ridge')
     .setTracker('clmtrackr')
@@ -82,11 +81,11 @@ function startEyeTracking() {
     });
 
   isTracking = true;
-  setTimeout(() => {
-  console.log('💥 Forcing Focus Mode');
-  applyMode('focus');
-}, 3000);
 
+  setTimeout(() => {
+    console.log('💥 Forcing Focus Mode');
+    applyMode('focus');
+  }, 3000);
 
   setInterval(() => {
     if (!isTracking) return;
@@ -102,17 +101,19 @@ function startEyeTracking() {
     console.log(`🎯 Gaze Prediction: x=${Math.round(x)}, y=${Math.round(y)}`);
 
     if (x < w * 0.2) {
-  console.log('🟢 Detected LEFT ZONE → Focus Mode');
-  applyMode('focus');
-} else if (x > w * 0.8) {
-  console.log('🟡 Detected RIGHT ZONE → Help Mode');
-  applyMode('help');
-} else if (y > h * 0.9) {
-  console.log('🔵 Detected BOTTOM ZONE → Night Mode');
-  applyMode('night');
+      console.log('🟢 Detected LEFT ZONE → Focus Mode');
+      applyMode('focus');
+    } else if (x > w * 0.8) {
+      console.log('🟡 Detected RIGHT ZONE → Help Mode');
+      applyMode('help');
+    } else if (y > h * 0.9) {
+      console.log('🔵 Detected BOTTOM ZONE → Night Mode');
+      applyMode('night');
+    }
+  }, 1000); // ✅ This was missing the closing brace!
 }
 
-
+// ✅ Now we can define applyMode safely here
 function applyMode(mode) {
   if (mode !== currentMode && modes[mode]) {
     console.log(`⚡ Switching to ${mode.toUpperCase()} mode`);
@@ -128,7 +129,7 @@ function applyMode(mode) {
   }
 }
 
-// Manual mode support via popup + shortcuts
+// ✅ Manual mode support via popup + shortcuts
 chrome.runtime.onMessage.addListener((request) => {
   if (request.mode && modes[request.mode]) {
     console.log(`🔧 Manual mode: ${request.mode}`);
