@@ -82,6 +82,11 @@ function startEyeTracking() {
     });
 
   isTracking = true;
+  setTimeout(() => {
+  console.log('💥 Forcing Focus Mode');
+  applyMode('focus');
+}, 3000);
+
 
   setInterval(() => {
     if (!isTracking) return;
@@ -97,14 +102,16 @@ function startEyeTracking() {
     console.log(`🎯 Gaze Prediction: x=${Math.round(x)}, y=${Math.round(y)}`);
 
     if (x < w * 0.2) {
-      applyMode('focus');
-    } else if (x > w * 0.8) {
-      applyMode('help');
-    } else if (y > h * 0.9) {
-      applyMode('night');
-    }
-  }, 1000);
+  console.log('🟢 Detected LEFT ZONE → Focus Mode');
+  applyMode('focus');
+} else if (x > w * 0.8) {
+  console.log('🟡 Detected RIGHT ZONE → Help Mode');
+  applyMode('help');
+} else if (y > h * 0.9) {
+  console.log('🔵 Detected BOTTOM ZONE → Night Mode');
+  applyMode('night');
 }
+
 
 function applyMode(mode) {
   if (mode !== currentMode && modes[mode]) {
