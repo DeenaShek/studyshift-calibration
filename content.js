@@ -58,10 +58,12 @@ let currentMode = null;
 let lastChange = Date.now();
 const cooldown = 2000;
 
+// ✅ Fix: Use correct key from calibration
 if (typeof webgazer !== 'undefined') {
-  if (!localStorage.getItem('webgazerData')) {
-    alert('Please complete calibration first for StudyShift to function.');
+  if (!localStorage.getItem('studyshift_calibrated')) {
+    console.warn('🧠 StudyShift: Calibration not detected. Please calibrate.');
   } else {
+    console.log('👁️ Starting WebGazer for StudyShift...');
     startEyeTracking();
   }
 }
@@ -69,8 +71,15 @@ if (typeof webgazer !== 'undefined') {
 function startEyeTracking() {
   webgazer.setRegression('ridge')
     .setTracker('clmtrackr')
+    .saveDataAcrossSessions(true)
+    .showPredictionPoints(true)
     .begin()
-    .showPredictionPoints(true);
+    .then(() => {
+      console.log("✅ WebGazer initialized successfully");
+    })
+    .catch((err) => {
+      console.error("❌ WebGazer failed to start:", err);
+    });
 
   isTracking = true;
 
@@ -85,6 +94,8 @@ function startEyeTracking() {
     const w = window.innerWidth;
     const h = window.innerHeight;
 
+    console.log(`🎯 Gaze Prediction: x=${Math.round(x)}, y=${Math.round(y)}`);
+
     if (x < w * 0.2) {
       applyMode('focus');
     } else if (x > w * 0.8) {
@@ -98,6 +109,7 @@ function startEyeTracking() {
 // Apply dynamic UI styling
 function applyMode(mode) {
   if (mode !== currentMode && modes[mode]) {
+    console.log(`⚡ Switching to ${mode.toUpperCase()} mode`);
     styleTag.textContent = modes[mode];
     currentMode = mode;
     lastChange = Date.now();
@@ -113,6 +125,7 @@ function applyMode(mode) {
 // Handle manual mode switching via popup or hotkeys
 chrome.runtime.onMessage.addListener((request) => {
   if (request.mode && modes[request.mode]) {
+    console.log(`🔧 Manual mode: ${request.mode}`);
     const manualStyle = modes[request.mode].replace('(Auto)', '(Manual)');
     styleTag.textContent = manualStyle;
     currentMode = request.mode;
