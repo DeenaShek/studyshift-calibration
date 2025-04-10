@@ -1,4 +1,4 @@
-// content.js - StudyShift with Live Gaze Logging
+// content.js - StudyShift with Live Gaze Logging (Final Version)
 
 const styleTag = document.createElement('style');
 document.head.appendChild(styleTag);
@@ -118,6 +118,7 @@ function applyMode(mode) {
   }
 }
 
+// Manual mode support via popup + shortcuts
 chrome.runtime.onMessage.addListener((request) => {
   if (request.mode && modes[request.mode]) {
     console.log(`🔧 Manual mode: ${request.mode}`);
