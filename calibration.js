@@ -56,26 +56,38 @@ function finishCalibration() {
   clearInterval(progressInterval);
   clearInterval(countdownInterval);
 
-  webgazer.end();
+  try {
+    webgazer.end();
+  } catch (err) {
+    console.warn('WebGazer end() failed:', err);
+  }
 
   const timestamp = new Date().toISOString();
 
-  chrome.storage?.local.set({
-    isCalibrated: true,
-    studyshift_last_calibration: timestamp
-  }, () => {
-    localStorage.setItem('studyshift_calibrated', 'true');
-    localStorage.setItem('studyshift_last_calibration', timestamp);
-
-    document.getElementById('status').textContent = 'Calibration complete!';
-    document.getElementById('countdown').textContent = 'Success!';
-    document.getElementById('progressBar').style.width = '100%';
-
-    // Give user 3 seconds to read the message, then close
-    setTimeout(() => {
-      window.location.href = 'https://studyshift-extension-close';
-    }, 3000);
-  });
+  // Save calibration flag
+  if (chrome?.storage?.local) {
+    chrome.storage.local.set({
+      isCalibrated: true,
+      studyshift_last_calibration: timestamp
+    }, () => {
+      console.log('Chrome storage updated.');
+      redirectToClose();
+    });
+  } else {
+    console.warn('chrome.storage not available – running outside extension?');
+    redirectToClose(); // fallback for testing
+  }
 }
+
+function redirectToClose() {
+  document.getElementById('status').textContent = 'Calibration complete!';
+  document.getElementById('countdown').textContent = 'Success!';
+  document.getElementById('progressBar').style.width = '100%';
+
+  setTimeout(() => {
+    window.location.href = 'https://studyshift-extension-close';
+  }, 3000);
+}
+
 
 window.addEventListener('load', initCalibration);
