@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>StudyShift Eye Calibration</title>
+  <link rel="stylesheet" href="calibration.css" />
+</head>
+<body>
+  <h1>StudyShift Calibration</h1>
+  <p>Let's train the system to understand your eye movements</p>
+
+  <div class="calibration-container">
+    <div class="instructions">
+      <strong>Tips for best results:</strong>
+      <ul>
+        <li>Sit about 50cm from your screen</li>
+        <li>Ensure good lighting on your face</li>
+        <li>Remove glasses if they cause glare</li>
+        <li>Keep your head relatively still</li>
+      </ul>
+    </div>
+
+    <p>Focus on the red dot below:</p>
+    <div class="dot"></div>
+
+    <div class="progress-container">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <div id="countdown">10 seconds remaining</div>
+    <p id="status">Initializing camera...</p>
+  </div>
+
+  <iframe src="sandbox.html" sandbox="allow-scripts allow-same-origin" style="display:none;" id="webgazer-frame"></iframe>
+
+  <script src="calibration.js"></script>
+</body>
+</html>
