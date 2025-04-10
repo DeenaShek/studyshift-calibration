@@ -70,8 +70,9 @@ function finishCalibration() {
     document.getElementById('progressBar').style.width = '100%';
 
     setTimeout(() => {
-      window.location.href = 'popup.html';
-    }, 1500);
+  window.location.href = 'https://studyshift-extension-close';
+}, 10000);
+
   });
 }
 
